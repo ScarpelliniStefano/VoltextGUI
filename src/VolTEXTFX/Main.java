@@ -94,6 +94,14 @@ public class Main extends Application {
             public void handle(ActionEvent e) {
 
                 JFileChooser fileChooser = new JFileChooser();
+		try {
+					fileChooser.setCurrentDirectory(new File((new File(".").getCanonicalPath())));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}    
+		    
+		
                 //fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
@@ -140,6 +148,13 @@ public class Main extends Application {
 
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Salva");
+		    
+		 try {
+					fileChooser.setCurrentDirectory(new File((new File(".").getCanonicalPath())));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
                 int userSelection = fileChooser.showSaveDialog(null);
 
@@ -171,6 +186,11 @@ public class Main extends Application {
             @Override
             public void handle(ActionEvent e) {
 
+		if(userTextArea.getText().trim().equals(""))
+                {
+                    msg("Grammatica vuota!", consoleTextArea, true);
+                    return;
+                }
                 msg("Creando il PDF", consoleTextArea, false);
                 String grammatica = userTextArea.getText();
                 List<String> errors=new ArrayList<String>();
