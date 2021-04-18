@@ -82,7 +82,7 @@ public class Main extends Application {
         grid.add(hbBtn3, 1, 6);
 
         TextArea consoleTextArea = new TextArea();
-        consoleTextArea.setPrefSize(prefWidth, 250);
+        consoleTextArea.setPrefSize(prefWidth, 300);
         consoleTextArea.setEditable(false);
         consoleTextArea.setStyle(" -fx-highlight-fill: lightgrey; -fx-highlight-text-fill: black; -fx-text-fill: wheat; ");
         consoleTextArea.setText("");
