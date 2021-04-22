@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+String currdir;
 
 	@Override
     public void start(Stage primaryStage) {
@@ -106,6 +107,8 @@ public class Main extends Application {
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
+			currdir = fileChooser.getCurrentDirectory().toString() + "/";
+                 	currdir=currdir.replace("\\", "/");
 
                     try {
 
@@ -197,7 +200,7 @@ public class Main extends Application {
                 
                 
                 try {
-					errors=user_gui.generaPDF(grammatica);
+					errors=user_gui.generaPDF(grammatica, currdir);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
