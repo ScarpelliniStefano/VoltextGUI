@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-String currdir;
+String currdir="";
 
 	@Override
     public void start(Stage primaryStage) {
@@ -60,15 +60,15 @@ String currdir;
 
         grid.add(userTextArea, 1, 1);
 
-        Button btnApri = new Button("Apri");
-        btnApri.setPrefSize(75,50);
+        Button btnApri = new Button("Apri grammatica");
+        btnApri.setPrefSize(140,50);
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(btnApri);
         grid.add(hbBtn, 1, 4);
 
-        Button btnSalva = new Button("Salva");
-        btnSalva.setPrefSize(75,50);
+        Button btnSalva = new Button("Salva grammatica");
+        btnSalva.setPrefSize(140,50);
         HBox hbBtn2 = new HBox(10);
         hbBtn2.setAlignment(Pos.CENTER);
         hbBtn2.getChildren().add(btnSalva);
@@ -95,8 +95,11 @@ String currdir;
             public void handle(ActionEvent e) {
 
                 JFileChooser fileChooser = new JFileChooser();
-		try {
-					fileChooser.setCurrentDirectory(new File((new File(".").getCanonicalPath())));
+                try {
+                	if(currdir=="")
+                		fileChooser.setCurrentDirectory(new File((new File(".").getCanonicalPath())));
+                	else
+                		fileChooser.setCurrentDirectory(new File(currdir));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -107,7 +110,7 @@ String currdir;
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-			currdir = fileChooser.getCurrentDirectory().toString() + "/";
+                    currdir = fileChooser.getCurrentDirectory().toString() + "/";
                  	currdir=currdir.replace("\\", "/");
 
                     try {
