@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -37,6 +38,7 @@ String currdir="";
         primaryStage.setMinHeight(400);
         primaryStage.setMaxWidth(1200);
         primaryStage.setMaxHeight(900);
+        primaryStage.getIcons().add(new Image("file:Icon.png"));
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -191,13 +193,13 @@ String currdir="";
 
             @Override
             public void handle(ActionEvent e) {
-
-		if(userTextArea.getText().trim().equals(""))
+            	msg("Creando il PDF", consoleTextArea, false);
+            	if(userTextArea.getText().trim().equals(""))
                 {
                     msg("Grammatica vuota!", consoleTextArea, true);
                     return;
                 }
-                msg("Creando il PDF", consoleTextArea, false);
+               
                 String grammatica = userTextArea.getText();
                 List<String> errors=new ArrayList<String>();
                 
@@ -212,8 +214,8 @@ String currdir="";
                 for(String msg:errors) {
                 	msgAdd(msg, consoleTextArea);
                 }
-
-
+                msgAdd("PDF GENERATO!",consoleTextArea);
+                		
             }
         });
 
@@ -237,6 +239,9 @@ String currdir="";
 
     public void msg(String s, TextArea a,boolean bad)
     {
+    	if(bad) {
+    		a.setStyle(" -fx-highlight-fill: lightgrey; -fx-highlight-text-fill: black; -fx-text-fill: red; ");
+    	}
         a.setText(s);
     }
     public void msgAdd(String s, TextArea a)

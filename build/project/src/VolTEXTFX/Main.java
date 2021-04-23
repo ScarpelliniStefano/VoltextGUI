@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+String currdir="";
 
 	@Override
     public void start(Stage primaryStage) {
@@ -59,15 +60,15 @@ public class Main extends Application {
 
         grid.add(userTextArea, 1, 1);
 
-        Button btnApri = new Button("Apri");
-        btnApri.setPrefSize(75,50);
+        Button btnApri = new Button("Apri grammatica");
+        btnApri.setPrefSize(140,50);
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.CENTER);
         hbBtn.getChildren().add(btnApri);
         grid.add(hbBtn, 1, 4);
 
-        Button btnSalva = new Button("Salva");
-        btnSalva.setPrefSize(75,50);
+        Button btnSalva = new Button("Salva grammatica");
+        btnSalva.setPrefSize(140,50);
         HBox hbBtn2 = new HBox(10);
         hbBtn2.setAlignment(Pos.CENTER);
         hbBtn2.getChildren().add(btnSalva);
@@ -82,7 +83,7 @@ public class Main extends Application {
         grid.add(hbBtn3, 1, 6);
 
         TextArea consoleTextArea = new TextArea();
-        consoleTextArea.setPrefSize(prefWidth, 250);
+        consoleTextArea.setPrefSize(prefWidth, 300);
         consoleTextArea.setEditable(false);
         consoleTextArea.setStyle(" -fx-highlight-fill: lightgrey; -fx-highlight-text-fill: black; -fx-text-fill: wheat; ");
         consoleTextArea.setText("");
@@ -94,10 +95,23 @@ public class Main extends Application {
             public void handle(ActionEvent e) {
 
                 JFileChooser fileChooser = new JFileChooser();
+                try {
+                	if(currdir=="")
+                		fileChooser.setCurrentDirectory(new File((new File(".").getCanonicalPath())));
+                	else
+                		fileChooser.setCurrentDirectory(new File(currdir));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}    
+		    
+		
                 //fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
                 int result = fileChooser.showOpenDialog(null);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
+                    currdir = fileChooser.getCurrentDirectory().toString() + "/";
+                 	currdir=currdir.replace("\\", "/");
 
                     try {
 
@@ -140,6 +154,13 @@ public class Main extends Application {
 
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Salva");
+		    
+		 try {
+					fileChooser.setCurrentDirectory(new File((new File(".").getCanonicalPath())));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
                 int userSelection = fileChooser.showSaveDialog(null);
 
@@ -170,14 +191,19 @@ public class Main extends Application {
 
             @Override
             public void handle(ActionEvent e) {
-
-                msg("Creando il PDF", consoleTextArea, false);
+            	msg("Creando il PDF", consoleTextArea, false);
+            	if(userTextArea.getText().trim().equals(""))
+                {
+                    msg("Grammatica vuota!", consoleTextArea, true);
+                    return;
+                }
+               
                 String grammatica = userTextArea.getText();
                 List<String> errors=new ArrayList<String>();
                 
                 
                 try {
-					errors=user_gui.generaPDF(grammatica);
+					errors=user_gui.generaPDF(grammatica, currdir);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -186,8 +212,8 @@ public class Main extends Application {
                 for(String msg:errors) {
                 	msgAdd(msg, consoleTextArea);
                 }
-
-
+                msgAdd("PDF GENERATO!",consoleTextArea);
+                		
             }
         });
 
@@ -211,6 +237,9 @@ public class Main extends Application {
 
     public void msg(String s, TextArea a,boolean bad)
     {
+    	if(bad) {
+    		a.setStyle(" -fx-highlight-fill: lightgrey; -fx-highlight-text-fill: black; -fx-text-fill: red; ");
+    	}
         a.setText(s);
     }
     public void msgAdd(String s, TextArea a)
